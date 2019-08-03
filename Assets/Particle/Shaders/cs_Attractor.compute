@@ -1,0 +1,26 @@
+﻿#pragma kernel CSMain
+#include "csInclude.cginc"
+float3 _AttractorPos;
+float _Force;
+float _Size;
+
+[numthreads(thread_group_size_x, thread_group_size_y, 1)]
+void CSMain(uint3 id : SV_DispatchThreadID)
+{
+
+	// calc force direction vector
+    float3 dir = _AttractorPos - output[id.x].pos;
+
+	// compute force power depending on a ratio between distance and attractor size
+    float f = length(dir) / _Size;
+	// check if the calculated distance is bigger than attractor size
+    f = 1 - f;
+	//cut below 0 and above 1
+    f = saturate(f);
+	// compute some magic
+    f = pow(f, 2.71);
+	// apply force in the direction of attractors position
+    output[id.x].acc += dir * f * _Force;
+
+
+}

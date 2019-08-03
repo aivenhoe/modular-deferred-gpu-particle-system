@@ -1,0 +1,38 @@
+﻿#pragma kernel CSMain
+#include "csInclude.cginc"
+
+
+StructuredBuffer<float3> initPosBuffer;
+StructuredBuffer<float3> initAccBuffer;
+StructuredBuffer<float> initMassBuffer;
+StructuredBuffer<float4> initColBuffer;
+StructuredBuffer<float3> emitterPosBuffer;
+
+
+uint _FrameCounter;
+uint _EmitterCount;
+uint _ParticlePerFrame;
+uint _MaxParticles;
+float3 _InitialVelocity;
+
+[numthreads(1, 1, 1)]
+void CSMain(uint3 id : SV_DispatchThreadID)
+{
+   
+	uint emitIndex = id.x % (_EmitterCount * _ParticlePerFrame);
+
+
+	//calc index offset
+    uint bufferIndex = (_FrameCounter * (_EmitterCount * _ParticlePerFrame)) + id.x;
+	
+    bufferIndex = bufferIndex % _MaxParticles;
+	
+	//Save Emit Data to RWBuffer
+    output[bufferIndex].mass = initMassBuffer[emitIndex];
+    output[bufferIndex].acc = initAccBuffer[emitIndex];
+	output[bufferIndex].vel = _InitialVelocity;
+	output[bufferIndex].col = initColBuffer[emitIndex];
+    output[bufferIndex].pos = emitterPosBuffer[id.x % _EmitterCount];
+    output[bufferIndex].age = 1;
+}
+

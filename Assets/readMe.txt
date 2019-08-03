@@ -1,0 +1,4 @@
+- use arrow keys to move emitter
+- press 'r' to reset emitter position
+- use mouse to move attractor
+- press left mouse button to push attractor and right mouse button to pull attractor

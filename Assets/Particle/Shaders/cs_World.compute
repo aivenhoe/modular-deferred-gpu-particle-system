@@ -1,0 +1,39 @@
+﻿#pragma kernel CSMain
+#include "csInclude.cginc"
+
+StructuredBuffer<float3> initAccBuffer;
+StructuredBuffer<float> initMassBuffer;
+StructuredBuffer<float4> initColBuffer;
+
+float _Gravity;
+float _ColorModifierFactor;
+
+void ApplyForce(float3 force, uint index)
+{
+	force *= output[index].mass; //depending on mass we apply force, e.g. gravity or drag
+    output[index].acc +=   force;
+}
+
+[numthreads(thread_group_size_x, thread_group_size_y, 1)]
+void CSMain(uint3 id : SV_DispatchThreadID)
+{
+    float dragC = 1;
+    float3 gravity = float3(0, _Gravity, 0);
+
+	float3 drag = output[id.x].vel / -8; //play with this value
+
+    ApplyForce(drag, id.x); //slow down particle
+    ApplyForce(gravity, id.x); //particle sinks to ground (if gravity < 0)
+
+	output[id.x].vel += output[id.x].acc;
+    output[id.x].pos += output[id.x].vel;
+	//age is only incremented when they have been emitted (otherwise particles are put at 0,0,0)
+	//later on in the fragment shader, it is checked whether they have age>0 (and thus alpha >0)
+	if (output[id.x].age > 0)
+	{
+		output[id.x].age++;
+		output[id.x].col = float4(output[id.x].vel*_ColorModifierFactor,1);
+	}
+	output[id.x].acc = 0.0;
+}
+

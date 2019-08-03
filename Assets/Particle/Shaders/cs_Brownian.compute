@@ -1,0 +1,18 @@
+﻿#pragma kernel CSMain
+#include "csInclude.cginc"
+
+StructuredBuffer<float3> randomBuffer;
+
+int _RandomIndex;
+int _ParticleCount;
+float _BrownianStrength;
+
+[numthreads(thread_group_size_x, thread_group_size_y, 1)]
+void CSMain(uint3 id : SV_DispatchThreadID)
+{
+    uint rndIndex = id.x + _RandomIndex;
+    rndIndex = rndIndex % _ParticleCount;
+    float3 brwnForce = randomBuffer[rndIndex]; //*0.7
+    float3 acc = (brwnForce * _BrownianStrength);	
+    output[id.x].acc += acc;
+}

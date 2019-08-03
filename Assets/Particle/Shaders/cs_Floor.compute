@@ -1,0 +1,15 @@
+﻿#pragma kernel CSMain
+#include "csInclude.cginc"
+
+[numthreads(thread_group_size_x, thread_group_size_y, 1)]
+void CSMain(uint3 id : SV_DispatchThreadID)
+{
+
+
+    if (output[id.x].pos.y < 0)
+    {
+        output[id.x].pos.y = 0;
+        output[id.x].vel.y *= -1; //bounce off floor
+    }
+	
+}
