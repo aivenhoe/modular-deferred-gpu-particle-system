@@ -8,7 +8,7 @@ Each Compute Shader is controlled by a script whereas its base is inherited from
 ![gif](https://imgur.com/T3gB5J3.gif)
 
 feel free to use this code as you wish, any contributions and pull requests are welcome.
-Tested on Win10 with 2019.1.10f1.
+Tested on a regular laptop with Win10 using unity 2019.1.10f1, spawning 1.5mio particles.
 
 ## thanks
 Obviously I learned a lot creating [this](https://github.com/aivenhoe/simple-deferred-gpu-cubes "this") little project, so kudos again to the people mentioned here.
