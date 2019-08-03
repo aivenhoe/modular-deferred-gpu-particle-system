@@ -3,7 +3,7 @@
 After understanding deferred lightning and unity's render pipeline with its command buffers, I wanted to find a clean way to create modular particle system. 
 
 Basically, there are different compute shaders which all render to the same buffers.
-Each Compute Shader is controlled by a script whereas its base is inherited from a ParticleBase class which again are managed by one ParticleCSManager.
+Each Compute Shader is controlled by a script whereas its base is inherited from a ParticleBase class which again is managed by one ParticleCSManager.
 
 ![gif](https://imgur.com/T3gB5J3.gif)
 
